@@ -1,5 +1,7 @@
 package app;
 
+import config.ConfigProvider;
+import config.ResourceJsonConfigProvider;
 import org.apache.hc.core5.http.ParseException;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
@@ -14,10 +16,19 @@ import java.util.Scanner;
 public class Main {
 
     static void main() {
+
+        ConfigProvider configProvider;
+        try {
+            configProvider = new ResourceJsonConfigProvider();
+        } catch (IOException _) {
+            System.out.println("Błąd podczas wczytywania konfiguracji!");
+            return;
+        }
+
         SpotifyApi spotifyApi = new SpotifyApi.Builder()
-                .setClientId("")
-                .setClientSecret("")
-                .setRedirectUri(URI.create(""))
+                .setClientId(configProvider.clientId())
+                .setClientSecret(configProvider.clientSecret())
+                .setRedirectUri(configProvider.redirectUri())
                 .build();
 
         AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyApi.authorizationCodeUri()
