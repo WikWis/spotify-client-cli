@@ -26,7 +26,7 @@ public class Main {
             return;
         }
 
-        SpotifyApi spotifyApi = ApiBuilder.builder().configProvider(configProvider).build().build();
+        SpotifyApi spotifyApi = ApiBuilder.build(configProvider);
 
         AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyApi.authorizationCodeUri()
                 .build();
