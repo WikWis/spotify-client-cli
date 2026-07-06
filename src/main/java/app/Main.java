@@ -1,5 +1,6 @@
 package app;
 
+import api.ApiBuilder;
 import config.ConfigProvider;
 import config.ResourceJsonConfigProvider;
 import org.apache.hc.core5.http.ParseException;
@@ -25,11 +26,7 @@ public class Main {
             return;
         }
 
-        SpotifyApi spotifyApi = new SpotifyApi.Builder()
-                .setClientId(configProvider.clientId())
-                .setClientSecret(configProvider.clientSecret())
-                .setRedirectUri(configProvider.redirectUri())
-                .build();
+        SpotifyApi spotifyApi = ApiBuilder.builder().configProvider(configProvider).build().build();
 
         AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyApi.authorizationCodeUri()
                 .build();
