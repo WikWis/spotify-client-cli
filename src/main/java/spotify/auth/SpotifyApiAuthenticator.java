@@ -11,16 +11,12 @@ import java.util.Optional;
 
 public class SpotifyApiAuthenticator {
 
-    private final int callbackPort;
-    private final String callbackPath;
-
-    public SpotifyApiAuthenticator(int callbackPort, String callbackPath) {
-        this.callbackPort = callbackPort;
-        this.callbackPath = callbackPath;
-    }
-
     public boolean authenticate(SpotifyApi api) {
-        SpotifyCallbackServer server = new SpotifyCallbackServer(callbackPort, callbackPath);
+        SpotifyCallbackServer server = new SpotifyCallbackServer
+                (
+                        api.getRedirectURI().getPort(),
+                        api.getRedirectURI().getRawPath()
+                );
 
         Optional<String> code = server.awaitCode(Duration.ofMinutes(2));
         if (code.isEmpty()) return false;

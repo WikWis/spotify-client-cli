@@ -29,9 +29,9 @@ public class SpotifyApplication {
         displayAuthorizationUri(spotifyApi);
 
         // Build Authenticator and authenticate api object
-        SpotifyApiAuthenticator authenticator = new SpotifyApiAuthenticator(8888, "/callback");
+        SpotifyApiAuthenticator authenticator = new SpotifyApiAuthenticator();
         if (!authenticator.authenticate(spotifyApi)) {
-            System.err.println("Nie udało się uwierzytelnić użytkownika.");
+            System.err.println("Problem with authorization!");
             return;
         }
 
@@ -54,7 +54,7 @@ public class SpotifyApplication {
         SpotifyUriProvider uriProvider = new SpotifyUriProvider(spotifyApi);
         URI authorizationUri = uriProvider.provide();
 
-        System.out.println("Otwórz ten adres w przeglądarce:");
+        System.out.println("Please open this link in your browser:");
         System.out.println(authorizationUri);
     }
 }

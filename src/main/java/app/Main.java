@@ -17,7 +17,8 @@ public class Main {
         } catch (IOException e) {
             System.err.println("Configuration wasn't loaded. " + e.getMessage());
         } catch (RuntimeException e) {
-            System.out.println("Exception while running the app." + e.getMessage());
+            System.err.println("Exception while running the app.\n" + e.getMessage());
         }
     }
+
 }
