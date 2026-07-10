@@ -10,12 +10,13 @@ import java.util.Objects;
 
 public class ResourceJsonConfigProvider implements ConfigProvider {
 
-    private static final String CONFIG_FILE = "settings.json";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
+    private final String fileName;
     private final JsonNode config;
 
-    public ResourceJsonConfigProvider() throws IOException {
+    public ResourceJsonConfigProvider(String fileName) throws IOException {
+        this.fileName = fileName;
         try (InputStream inputStream = openConfigFile()) {
             this.config = OBJECT_MAPPER.readTree(inputStream);
         }
@@ -49,8 +50,8 @@ public class ResourceJsonConfigProvider implements ConfigProvider {
     private InputStream openConfigFile() {
         InputStream inputStream = ResourceJsonConfigProvider.class
                 .getClassLoader()
-                .getResourceAsStream(CONFIG_FILE);
+                .getResourceAsStream(fileName);
 
-        return Objects.requireNonNull(inputStream, "Missing configuration file: " + CONFIG_FILE);
+        return Objects.requireNonNull(inputStream, "Missing configuration file: " + fileName);
     }
 }

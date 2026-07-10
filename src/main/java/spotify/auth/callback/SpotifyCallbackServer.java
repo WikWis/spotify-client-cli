@@ -1,11 +1,8 @@
-package authorization;
+package spotify.auth.callback;
 
 import io.fusionauth.http.log.Level;
 import io.fusionauth.http.log.Logger;
-import io.fusionauth.http.server.HTTPHandler;
-import io.fusionauth.http.server.HTTPListenerConfiguration;
-import io.fusionauth.http.server.HTTPResponse;
-import io.fusionauth.http.server.HTTPServer;
+import io.fusionauth.http.server.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -13,18 +10,18 @@ import java.time.Duration;
 import java.util.Optional;
 import java.util.concurrent.*;
 
-public class OAuthCallbackServer {
-
-    private static final int PORT = 8888;
-    private static final String CALLBACK_PATH = "/callback";
+public class SpotifyCallbackServer {
 
     private final CompletableFuture<String> codeFuture = new CompletableFuture<>();
+
+    private final String callbackPath;
     private final HTTPServer server;
 
-    public OAuthCallbackServer() {
+    public SpotifyCallbackServer(int port, String callbackPath) {
+        this.callbackPath = callbackPath;
         this.server = new HTTPServer()
-                .withHandler(handler)
-                .withListener(new HTTPListenerConfiguration(PORT))
+                .withHandler(this::handle)
+                .withListener(new HTTPListenerConfiguration(port))
                 .withLoggerFactory((_) -> NO_OP_LOGGER);
     }
 
@@ -39,9 +36,8 @@ public class OAuthCallbackServer {
         }
     }
 
-    private final HTTPHandler handler = (req, res) -> {
-
-        if (!CALLBACK_PATH.equals(req.getPath())) {
+    private void handle(HTTPRequest req, HTTPResponse res) throws Exception {
+        if (!this.callbackPath.equals(req.getPath())) {
             this.respond(res, 400, "<h1>Bad path!</h1>");
             codeFuture.cancel(true);
             return;
@@ -63,7 +59,7 @@ public class OAuthCallbackServer {
                         ? "<h1>Please return back to the terminal!</h1>"
                         : "<h1>Authorization callback was already handled.</h1>"
         );
-    };
+    }
 
     private void respond(HTTPResponse response, int status, String body) throws IOException {
         response.setStatus(status);

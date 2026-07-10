@@ -1,11 +1,11 @@
-package api;
+package spotify.api;
 
 import config.ConfigProvider;
 import se.michaelthelin.spotify.SpotifyApi;
 
-public class ApiBuilder {
+public class SpotifyApiBuilder {
 
-    private ApiBuilder() {}
+    private SpotifyApiBuilder() {}
 
     public static SpotifyApi build(ConfigProvider provider) {
         if (provider == null) {
